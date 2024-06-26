@@ -22,6 +22,13 @@ target_text = font.render("CURRENT CATCH", True, white)
 target_text_rect = target_text.get_rect()
 target_text_rect.center = (WINDOW_WIDTH//2,20)
 
+title_text = font.render("MONSTER WRANGLER", True, white)
+title_text_rect = title_text.get_rect()
+title_text_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2)
+
+start_text = font.render("MONSTER WRANGLER", True, white)
+start_text_rect = start_text.get_rect()
+start_text_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2 - 30)
 
 
 
@@ -36,6 +43,15 @@ while game_running:
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             game_running = False
+
+            pause = True
+            while pause:
+                display_surface.blit(title_text, title_text_rect)
+                display_surface.blit(start_text, start_text_rect)
+                for ev in pygame.event.get():
+                    if ev.type == pygame.K_RETURN:
+                        game_running = False
+
 
    
 
