@@ -53,6 +53,35 @@ class Monster(pygame.sprite.Sprite):
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        
+        monster_speed = 3
+        monster_direction = random.choice([1,-1])
+        monster_speed = monster_speed * monster_direction
+        self.dx = monster_speed
+        self.dy = monster_speed
+
+        self.choice = random.choice([1,0])
+
+    def update(self):
+        self.move()
+
+    def move(self):
+        self.rect.x += self.dx
+
+        if self.choice == 1:
+            self.rect.y += self.dy
+        else:
+            self.rect.y -= self.dy
+
+        if self.rect.right >= WINDOW_WIDTH -3:
+            self.dx = -self.dx
+        if self.rect.bottom >= 610 - 3:
+            self.dy = -self.dy
+        if self.rect.left <= 3:
+            self.dx = -self.dx
+        if self.rect.top <= 93:
+            self.dy = -self.dy
+
 
 monster_group = pygame.sprite.Group()
 
@@ -68,10 +97,29 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)
 
-player_group = pygame.sprite.Group()
+        self.velocity = 5
+    def update(self):
+        self.move()
 
+    def move(self):  
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.rect.x -= self.velocity
+        if keys[pygame.K_RIGHT]:
+            self.rect.x += self.velocity
+        if keys[pygame.K_UP]:
+            self.rect.y -= self.velocity
+        if keys[pygame.K_DOWN]:
+            self.rect.y += self.velocity
+        
+
+
+player_group = pygame.sprite.Group()
 player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650))
 
+monster_speed = 5
+monster_direction = random.choice([1,-1])
+monster_speed = monster_speed * monster_direction
 
 
 pause = True
@@ -80,34 +128,34 @@ while game_running:
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             game_running = False
-
         elif ev.type == pygame.KEYDOWN:
             if ev.key == pygame.K_RETURN:
                 pause = False
 
-        display_surface.fill((0, 0, 0))
-        if pause:
-            display_surface.blit(title_text, title_text_rect)
-            display_surface.blit(start_text, start_text_rect)
+    display_surface.fill((0, 0, 0))
 
-
+    if pause:
+        display_surface.blit(title_text, title_text_rect)
+        display_surface.blit(start_text, start_text_rect)
 
    
-        else:
-            display_surface.fill((0, 0, 0))
-            display_surface.blit(round_text, round_text_rect)
-            display_surface.blit(lives_text, lives_text_rect)
-            display_surface.blit(score_text, score_text_rect)
-            display_surface.blit(target_text, target_text_rect)
-            pygame.draw.line(display_surface, purple, (0, 90), (1200, 90), 5)
-            pygame.draw.line(display_surface, purple, (0, 610), (1200, 610), 5)
-            pygame.draw.line(display_surface, purple, (1197, 90), (1197, 610), 5)
-            pygame.draw.line(display_surface, purple, (2, 90), (2, 610), 5)
-            monster_group.draw(display_surface)
-            player_group.draw(display_surface)
-            
-            clock.tick(FPS)
-            
+    else:
+        display_surface.fill((0, 0, 0))
+        display_surface.blit(round_text, round_text_rect)
+        display_surface.blit(lives_text, lives_text_rect)
+        display_surface.blit(score_text, score_text_rect)
+        display_surface.blit(target_text, target_text_rect)
+        pygame.draw.line(display_surface, purple, (0, 90), (1200, 90), 5)
+        pygame.draw.line(display_surface, purple, (0, 610), (1200, 610), 5)
+        pygame.draw.line(display_surface, purple, (1197, 90), (1197, 610), 5)
+        pygame.draw.line(display_surface, purple, (2, 90), (2, 610), 5)
+        monster_group.draw(display_surface)
+        player_group.draw(display_surface)
+        player_group.update()
+        monster_group.update()
+
+
+    clock.tick(FPS)     
     pygame.display.update()
+
 pygame.quit
-               
