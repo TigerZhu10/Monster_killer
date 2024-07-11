@@ -47,18 +47,20 @@ round_text = font.render(f"CURRENT ROUND: {round}", True, white)
 round_text_rect = round_text.get_rect()
 round_text_rect.topleft = (5, 55)
 
+
 class Monster(pygame.sprite.Sprite):
     def __init__(self, image ,x, y):
         super().__init__()
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        
         monster_speed = 3
         monster_direction = random.choice([1,-1])
         monster_speed = monster_speed * monster_direction
         self.dx = monster_speed
         self.dy = monster_speed
+
+        self.is_target = False
 
         self.choice = random.choice([1,0])
 
@@ -90,16 +92,22 @@ monster_group.add(Monster("green_monster.png", random.randint(64, 1137), random.
 monster_group.add(Monster("purple_monster.png", random.randint(64, 1137), random.randint(154, 546)))
 monster_group.add(Monster("yellow_monster.png", random.randint(64, 1137), random.randint(154, 546)))
 
+target_monster = random.choice(monster_group.sprites())
+target_monster.is_target = True
+
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, knight, x, y):
         super().__init__()
         self.image = pygame.image.load(knight)
         self.rect = self.image.get_rect()
-        self.rect.center = (x,y)
+        self.rect.center = (x,y)     
 
         self.velocity = 5
     def update(self):
         self.move()
+        self.collisions()
 
     def move(self):  
         keys = pygame.key.get_pressed()
@@ -111,15 +119,17 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.velocity
         if keys[pygame.K_DOWN]:
             self.rect.y += self.velocity
-        
 
+    def collisions(self):
+        collide_target = pygame.sprite.spritecollideany(self, monster_group)
+        if collide_target:
+            if collide_target.is_target:
+                print("hit")
+                monster_group.remove(collide_target)
+          
 
 player_group = pygame.sprite.Group()
 player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650))
-
-monster_speed = 5
-monster_direction = random.choice([1,-1])
-monster_speed = monster_speed * monster_direction
 
 
 pause = True
