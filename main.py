@@ -124,8 +124,11 @@ class Player(pygame.sprite.Sprite):
         collide_target = pygame.sprite.spritecollideany(self, monster_group)
         if collide_target:
             if collide_target.is_target:
-                print("hit")
                 monster_group.remove(collide_target)
+                target_monster = random.choice(monster_group.sprites())
+                target_monster.is_target = True
+            
+
           
 
 player_group = pygame.sprite.Group()
