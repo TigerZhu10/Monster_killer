@@ -59,9 +59,7 @@ class Monster(pygame.sprite.Sprite):
         monster_speed = monster_speed * monster_direction
         self.dx = monster_speed
         self.dy = monster_speed
-
         self.is_target = False
-
         self.choice = random.choice([1,0])
 
     def update(self):
@@ -98,8 +96,10 @@ target_monster.is_target = True
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, knight, x, y):
+    def __init__(self, knight, x, y, monster_group):
         super().__init__()
+        self.monster_group = monster_group
+
         self.image = pygame.image.load(knight)
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)     
@@ -121,18 +121,21 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.velocity
 
     def collisions(self):
-        collide_target = pygame.sprite.spritecollideany(self, monster_group)
+        collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
         if collide_target:
             if collide_target.is_target:
-                monster_group.remove(collide_target)
-                target_monster = random.choice(monster_group.sprites())
-                target_monster.is_target = True
-            
+                self.monster_group.remove(collide_target)
+                print("no more target")
+                if len(self.monster_group.sprites()) > 0:
+                    new_target_monster = random.choice(self.monster_group.sprites())
+                    new_target_monster.is_target = True
+                else:
+                    print("All targets caught!")
 
           
 
 player_group = pygame.sprite.Group()
-player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650))
+player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group))
 
 
 pause = True
