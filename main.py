@@ -145,14 +145,11 @@ class Player(pygame.sprite.Sprite):
             self.monster_group.add(self.Monster("green_monster.png", random.randint(64, 1137), random.randint(154, 546)))
             self.monster_group.add(self.Monster("purple_monster.png", random.randint(64, 1137), random.randint(154, 546)))
             self.monster_group.add(self.Monster("yellow_monster.png", random.randint(64, 1137), random.randint(154, 546)))
-            
-            collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
-            if collide_target:
-                if collide_target.is_target:
-                    self.monster_group.remove(collide_target)
-                    if len(self.monster_group.sprites()) > 0:
-                        target_monster = random.choice(monster_group.sprites())
-                        target_monster.is_target = True
+        self.flag = True
+
+        if len(self.monster_group.sprites()) > 0:
+            target_monster = random.choice(monster_group.sprites())
+            target_monster.is_target = True
 
 
           
