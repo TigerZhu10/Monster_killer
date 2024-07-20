@@ -96,10 +96,14 @@ target_monster.is_target = True
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, knight, x, y, monster_group):
+    def __init__(self, knight, x, y, monster_group, Monster):
         super().__init__()
         self.monster_group = monster_group
+        self.Monster = Monster
+        self.in_round = 1
 
+        self.flag = True
+        
         self.image = pygame.image.load(knight)
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)     
@@ -121,21 +125,39 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.velocity
 
     def collisions(self):
-        collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
-        if collide_target:
-            if collide_target.is_target:
-                self.monster_group.remove(collide_target)
-                print("no more target")
-                if len(self.monster_group.sprites()) > 0:
-                    new_target_monster = random.choice(self.monster_group.sprites())
-                    new_target_monster.is_target = True
-                else:
-                    print("All targets caught!")
+            collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
+            if collide_target:
+                if collide_target.is_target:
+                    self.monster_group.remove(collide_target)
+                    if len(self.monster_group.sprites()) > 0:
+                        target_monster = random.choice(monster_group.sprites())
+                        target_monster.is_target = True
+                if len(self.monster_group.sprites()) <= 0 and self.flag == True:
+                    print("he")
+                    self.in_round += 1
+                    self.flag = False
+                    self.next_round()
+
+    def next_round(self):
+        for i in range(self.in_round):
+            self.monster_group.add(self.Monster("blue_monster.png", random.randint(64, 1137), random.randint(154, 546)))
+            self.monster_group.add(self.Monster("green_monster.png", random.randint(64, 1137), random.randint(154, 546)))
+            self.monster_group.add(self.Monster("purple_monster.png", random.randint(64, 1137), random.randint(154, 546)))
+            self.monster_group.add(self.Monster("yellow_monster.png", random.randint(64, 1137), random.randint(154, 546)))
+            
+            collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
+            if collide_target:
+                if collide_target.is_target:
+                    self.monster_group.remove(collide_target)
+                    if len(self.monster_group.sprites()) > 0:
+                        target_monster = random.choice(monster_group.sprites())
+                        target_monster.is_target = True
+
 
           
 
 player_group = pygame.sprite.Group()
-player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group))
+player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group, Monster))
 
 
 pause = True
