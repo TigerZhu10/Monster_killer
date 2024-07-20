@@ -115,13 +115,14 @@ class Player(pygame.sprite.Sprite):
 
     def move(self):  
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
             self.rect.x -= self.velocity
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and self.rect.right < WINDOW_WIDTH:
             self.rect.x += self.velocity
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] and self.rect.top > 92:
             self.rect.y -= self.velocity
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] and self.rect.bottom < 610:
             self.rect.y += self.velocity
 
     def collisions(self):
@@ -164,6 +165,7 @@ pause = True
 game_running = True
 while game_running:
     for ev in pygame.event.get():
+        print(ev)
         if ev.type == pygame.QUIT:
             game_running = False
         elif ev.type == pygame.KEYDOWN:
