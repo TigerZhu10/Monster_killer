@@ -133,11 +133,11 @@ class Player(pygame.sprite.Sprite):
                     if len(self.monster_group.sprites()) > 0:
                         target_monster = random.choice(monster_group.sprites())
                         target_monster.is_target = True
-                if len(self.monster_group.sprites()) <= 0 and self.flag == True:
-                    print("he")
-                    self.in_round += 1
-                    self.flag = False
-                    self.next_round()
+            if len(self.monster_group.sprites()) <= 0 and self.flag == True:
+                print("he")
+                self.in_round += 1
+                self.flag = False
+                self.next_round()
 
     def next_round(self):
         for i in range(self.in_round):
