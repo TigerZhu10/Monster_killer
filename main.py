@@ -54,6 +54,7 @@ class Monster(pygame.sprite.Sprite):
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+       # self.current_target = pygame.image.load()
         monster_speed = 3
         monster_direction = random.choice([1,-1])
         monster_speed = monster_speed * monster_direction
@@ -81,6 +82,9 @@ class Monster(pygame.sprite.Sprite):
             self.dx = -self.dx
         if self.rect.top <= 93:
             self.dy = -self.dy
+    
+    def current_target(self):
+        pass
 
 
 monster_group = pygame.sprite.Group()
@@ -90,8 +94,8 @@ monster_group.add(Monster("green_monster.png", random.randint(64, 1137), random.
 monster_group.add(Monster("purple_monster.png", random.randint(64, 1137), random.randint(154, 546)))
 monster_group.add(Monster("yellow_monster.png", random.randint(64, 1137), random.randint(154, 546)))
 
-target_monster = random.choice(monster_group.sprites())
-target_monster.is_target = True
+target_monster_first = random.choice(monster_group.sprites())
+target_monster_first.is_target = True
 
 
 
@@ -101,7 +105,7 @@ class Player(pygame.sprite.Sprite):
         self.monster_group = monster_group
         self.Monster = Monster
         self.in_round = 1
-
+        
         self.flag = True
         
         self.image = pygame.image.load(knight)
@@ -125,7 +129,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN] and self.rect.bottom < 610:
             self.rect.y += self.velocity
 
-    def collisions(self):
+    def collisions(self):    
             collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
             if collide_target:
                 if collide_target.is_target:
@@ -133,6 +137,8 @@ class Player(pygame.sprite.Sprite):
                     if len(self.monster_group.sprites()) > 0:
                         target_monster = random.choice(monster_group.sprites())
                         target_monster.is_target = True
+                    display_surface.blit(target_monster.image, (567, 27))
+                    pygame.display.update()
             if len(self.monster_group.sprites()) <= 0 and self.flag == True:
                 print("he")
                 self.in_round += 1
@@ -154,8 +160,12 @@ class Player(pygame.sprite.Sprite):
 
           
 
+# player_group = pygame.sprite.Group()
+# player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group, Monster))
+            
 player_group = pygame.sprite.Group()
-player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group, Monster))
+player = Player("knight.png", WINDOW_WIDTH // 2, 650, monster_group, Monster)
+player_group.add(player)
 
 
 pause = True
@@ -176,7 +186,7 @@ while game_running:
         display_surface.blit(start_text, start_text_rect)
 
    
-    else:
+    else: 
         display_surface.fill((0, 0, 0))
         display_surface.blit(round_text, round_text_rect)
         display_surface.blit(lives_text, lives_text_rect)
@@ -190,6 +200,8 @@ while game_running:
         player_group.draw(display_surface)
         player_group.update()
         monster_group.update()
+        if player.in_round == 1:
+            display_surface.blit(target_monster_first.image, (567, 27))
 
 
     clock.tick(FPS)     
