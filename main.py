@@ -130,6 +130,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.velocity
 
     def collisions(self):
+            #Global makes local variabal to an global variable
             global current_target_monster    
             collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
             if collide_target:
