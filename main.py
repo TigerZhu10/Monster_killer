@@ -129,7 +129,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.velocity
 
     def collisions(self):
-            #Global makes local variabal to an global variable
+            #Global makes local variabal to an global variable 
             global current_target_monster, score, live, score_text, lives_text, round, round_text    
             collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
             if collide_target:
@@ -141,15 +141,19 @@ class Player(pygame.sprite.Sprite):
                         target_monster = random.choice(monster_group.sprites())
                         target_monster.is_target = True
                         current_target_monster = target_monster
-                        print("hi")
                     if len(self.monster_group.sprites()) <= 0 and self.flag == True:
+                        self.rect.center = (WINDOW_WIDTH//2, 650) 
                         self.in_round += 1
                         self.flag = False
                         self.next_round()
                         round += 1
+
                 else:
+                    self.rect.center = (WINDOW_WIDTH//2, 650) 
                     miss_sound.play(0)
                     live -= 1
+                    
+                    
 
                 round_text = font.render(f"CURRENT ROUND: {round}", True, white)
                 score_text = font.render(f"SCORE: {score}", True, white)
