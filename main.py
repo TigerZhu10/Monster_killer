@@ -20,6 +20,9 @@ yellow = (255, 255, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
+catch_sound = pygame.mixer.Sound('catch.wav')
+miss_sound = pygame.mixer.Sound('die.wav')
+
 font = pygame.font.Font('Abrushow.ttf', 23)
 
 
@@ -54,7 +57,6 @@ class Monster(pygame.sprite.Sprite):
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-       # self.current_target = pygame.image.load()
         monster_speed = 3
         monster_direction = random.choice([1,-1])
         monster_speed = monster_speed * monster_direction
@@ -82,9 +84,6 @@ class Monster(pygame.sprite.Sprite):
             self.dx = -self.dx
         if self.rect.top <= 93:
             self.dy = -self.dy
-    
-    def current_target(self):
-        pass
 
 
 monster_group = pygame.sprite.Group()
@@ -131,20 +130,30 @@ class Player(pygame.sprite.Sprite):
 
     def collisions(self):
             #Global makes local variabal to an global variable
-            global current_target_monster    
+            global current_target_monster, score, live, score_text, lives_text, round, round_text    
             collide_target = pygame.sprite.spritecollideany(self, self.monster_group)
             if collide_target:
                 if collide_target.is_target:
+                    catch_sound.play(0)
                     self.monster_group.remove(collide_target)
+                    score += 1
                     if len(self.monster_group.sprites()) > 0:
                         target_monster = random.choice(monster_group.sprites())
                         target_monster.is_target = True
                         current_target_monster = target_monster
-            if len(self.monster_group.sprites()) <= 0 and self.flag == True:
-                print("he")
-                self.in_round += 1
-                self.flag = False
-                self.next_round()
+                        print("hi")
+                    if len(self.monster_group.sprites()) <= 0 and self.flag == True:
+                        self.in_round += 1
+                        self.flag = False
+                        self.next_round()
+                        round += 1
+                else:
+                    miss_sound.play(0)
+                    live -= 1
+
+                round_text = font.render(f"CURRENT ROUND: {round}", True, white)
+                score_text = font.render(f"SCORE: {score}", True, white)
+                lives_text = font.render(f"LIVES: {live}", True, white)
 
     def next_round(self):
         global current_target_monster
