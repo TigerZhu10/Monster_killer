@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 
 score = 0
 live = 5
-round = 0
+round = 1
 
 white = (255, 255, 255)
 purple = (128, 0, 128)
@@ -115,6 +115,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.move()
         self.collisions()
+        self.Chance()
 
     def move(self):  
         keys = pygame.key.get_pressed()
@@ -147,7 +148,7 @@ class Player(pygame.sprite.Sprite):
                         self.flag = False
                         self.next_round()
                         round += 1
-
+                # else 的逻辑是属于第136行的，但是不应该放在前面。因为如果放在前面第140行到第149行就不会执行。
                 else:
                     self.rect.center = (WINDOW_WIDTH//2, 650) 
                     miss_sound.play(0)
@@ -173,6 +174,13 @@ class Player(pygame.sprite.Sprite):
             target_monster.is_target = True
             current_target_monster = target_monster
 
+    def Chance(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.rect.bottom = (680)
+        
+
+
 
           
 
@@ -185,7 +193,6 @@ pause = True
 game_running = True
 while game_running:
     for ev in pygame.event.get():
-        print(ev)
         if ev.type == pygame.QUIT:
             game_running = False
         elif ev.type == pygame.KEYDOWN:
