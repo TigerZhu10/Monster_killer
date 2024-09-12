@@ -219,7 +219,7 @@ while game_running:
         monster_group.draw(display_surface)
         player_group.draw(display_surface)
         player_group.update()
-        monster_group.update()
+        monster_group.update() 
         if current_target_monster:
             display_surface.blit(current_target_monster.image, (567, 27))
 
