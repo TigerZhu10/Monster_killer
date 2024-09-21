@@ -182,8 +182,6 @@ class Player(pygame.sprite.Sprite):
 
 
 
-          
-
 player_group = pygame.sprite.Group()
 player_group.add(Player("knight.png", WINDOW_WIDTH//2, 650, monster_group, Monster))
             
