@@ -154,8 +154,7 @@ class Player(pygame.sprite.Sprite):
                     miss_sound.play(0)
                     live -= 1
                     
-                    
-
+                
                 round_text = font.render(f"CURRENT ROUND: {round}", True, white)
                 score_text = font.render(f"SCORE: {score}", True, white)
                 lives_text = font.render(f"LIVES: {live}", True, white)
