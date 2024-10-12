@@ -1,2 +1,1 @@
-display_surface.blit(target_monster.image, (567, 27))
-                        # pygame.display.update()
+monster_group.add(Monster("blue_monster.png", random.randint(64, 1137), random.randint(154, 546)))
