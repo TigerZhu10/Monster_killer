@@ -202,7 +202,6 @@ while game_running:
         display_surface.blit(title_text, title_text_rect)
         display_surface.blit(start_text, start_text_rect)
 
-   
     else: 
         display_surface.fill((0, 0, 0))
         display_surface.blit(round_text, round_text_rect)
